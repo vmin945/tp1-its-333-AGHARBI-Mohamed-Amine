@@ -1,6 +1,12 @@
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+@app.route('/api/salutation', methods=['GET'])
+def salutation():
+    return jsonify(message="Hello World")
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 ## EXO1: API GET: renvoyer un helloworld - API end point name: "api/salutation"
 
