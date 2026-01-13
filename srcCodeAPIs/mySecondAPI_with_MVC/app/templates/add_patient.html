@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Patient</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Ajouter un Patient</h1>
+    <form action="/new" method="POST">
+        <label for="n">Nom</label><br>
+        <input type="text" id="n" name="n" required><br><br>
+
+        <label for="add">Adresse</label><br>
+        <textarea id="add" name="add" required></textarea><br><br>
+
+        <label for="pin">Code Postal</label><br>
+        <input type="text" id="pin" name="pin" required><br><br>
+
+        <button type="submit">Ajouter</button>
+    </form>
+</body>
+</html>

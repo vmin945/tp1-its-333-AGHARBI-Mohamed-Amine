@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Gestion des Patients</h1>
+
+    <!-- Formulaire de recherche -->
+    <form action="/search" method="GET">
+        <label for="search">Rechercher un patient :</label><br>
+        <input type="text" id="search" name="name" placeholder="Nom du patient" required>
+        <button type="submit">Rechercher</button>
+    </form>
+
+    <hr>
+
+    <!-- Lien pour ajouter un patient -->
+    <h2>Ajouter un nouveau patient</h2>
+    <a href="/new">
+        <button>Ajouter un Patient</button>
+    </a>
+</body>
+</html>
