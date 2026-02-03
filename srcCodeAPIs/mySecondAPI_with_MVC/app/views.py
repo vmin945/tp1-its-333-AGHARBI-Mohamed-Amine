@@ -1,5 +1,9 @@
 from app import app
+<<<<<<< HEAD
 from flask import render_template, request, jsonify, redirect, url_for
+=======
+from flask import render_template, request, jsonify, redirect, url_for, abort
+>>>>>>> 54e06c0 (Initial commit for the project)
 from app import db
 from app.models import Patient
 
@@ -104,3 +108,50 @@ def search_patient():
 
     # Afficher les résultats dans une table
     return render_template('patients.html', patients=patients)
+<<<<<<< HEAD
+=======
+
+# Updated the names in the data_sante dictionary to Jean, Amanda, and Paul
+data_sante = {
+    "jean": {
+        "tension": "12/8", 
+        "pouls": 75, 
+        "poids": 69,
+        "groupe": "A+"
+    },
+    "amanda": {
+        "tension": "11/7", 
+        "pouls": 70, 
+        "poids": 55,
+        "groupe": "O+"
+    },
+    "paul": {
+        "tension": "13/8", 
+        "pouls": 80, 
+        "poids": 62,
+        "groupe": "B+"
+    }
+}
+
+# 2. La route pour afficher le site web
+@app.route('/sante/<nom>/<mesure>')
+def consulter_sante_web(nom, mesure):
+    # On cherche la personne (en minuscule pour éviter les erreurs de frappe)
+    personne = data_sante.get(nom.lower())
+    
+    if personne:
+        # On cherche la mesure précise demandée (poids, tension, pouls, ou groupe)
+        valeur = personne.get(mesure.lower())
+        
+        if valeur:
+            # On envoie les données au fichier HTML 'sante.html'
+            return render_template(
+                'sante.html', 
+                nom=nom, 
+                type_donnee=mesure, 
+                valeur=valeur
+            )
+    
+    # Message si le nom ou la donnée n'existe pas
+    return f"Désolé, aucune donnée trouvée pour {nom} concernant : {mesure}", 404
+>>>>>>> 54e06c0 (Initial commit for the project)

@@ -1,21 +1,22 @@
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+
 @app.route('/api/salutation', methods=['GET'])
 def salutation():
-    return jsonify(message="Hello World")
-## EXO1: API GET: renvoyer un helloworld - API end point name: "api/salutation"
+    return jsonify({"message": "helloworld"})
 
-
-## EXO2: API POST: renvoyer un nom fourni en parametre - API end point name: "api/utilisateurs"
-
+## EXO2: API POST: renvoyer un nom fourni en parametre
 @app.route('/api/utilisateurs', methods=['POST'])
 def utilisateurs():
-    data = request.get_json()
-    nom = data.get("nom", "Inconnu")
-    return jsonify(message=f"Bonjour {nom}")
-# to be tested with curl: 
-# >> curl -i -X GET http://localhost:5000/api/salutation
-# >> curl -i -X POST -H 'Content-Type: application/json' -d '{"nom": "Bob"}' http://localhost:5000/api/utilisateurs
+    # On récupère les données JSON envoyées par l'utilisateur
+    donnees = request.get_json()
+    
+    # On extrait la valeur associée à la clé "nom"
+    nom_extrait = donnees.get('nom', 'Nom non fourni')
+    
+    # On renvoie la réponse en JSON
+    return jsonify({"nom_recu": nom_extrait})
+
 if __name__ == '__main__':
     app.run(debug=True)

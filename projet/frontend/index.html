@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mon TP Microservices</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f8f9fa; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background: #007bff; color: white; }
+        .btn { padding: 8px 12px; cursor: pointer; border-radius: 5px; border: none; color: white; font-weight: bold; }
+        .btn-add { background: #28a745; margin-bottom: 10px; }
+        .btn-del { background: #dc3545; }
+        .btn-edit { background: #17a2b8; }
+        input { padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>📊 Dashboard Santé - Jihane</h1>
+        <input type="text" id="nameInput" placeholder="Nom de la personne">
+        <button class="btn btn-add" onclick="creerPersonne()">+ Ajouter</button>
+
+        <table id="patientTable">
+            <thead>
+                <tr>
+                    <th>ID</th> <th>Nom</th> <th>Poids (kg)</th> <th>Taille (m)</th> <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_P = "http://localhost:5001/persons";
+        const API_H = "http://localhost:5002/health";
+
+        async function rafraichir() {
+            const res = await fetch(API_P);
+            const persons = await res.json();
+            const tbody = document.querySelector("#patientTable tbody");
+            tbody.innerHTML = "";
+
+            for (let p of persons) {
+                const resH = await fetch(`${API_H}/${p.id}`);
+                const health = await resH.json();
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${p.id}</td> <td><strong>${p.name}</strong></td>
+                        <td>${health.poids}</td> <td>${health.taille}</td>
+                        <td>
+                            <button class="btn btn-edit" onclick="modifier(${p.id})">Santé</button>
+                            <button class="btn btn-del" onclick="supprimer(${p.id})">X</button>
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        async function creerPersonne() {
+            const nom = document.getElementById('nameInput').value;
+            if(!nom) return;
+            await fetch(API_P, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name: nom})
+            });
+            document.getElementById('nameInput').value = "";
+            rafraichir();
+        }
+
+        async function modifier(id) {
+            const p = prompt("Poids :");
+            const t = prompt("Taille :");
+            if(p && t) {
+                await fetch(`${API_H}/${id}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({poids: p, taille: t})
+                });
+                rafraichir();
+            }
+        }
+
+        async function supprimer(id) {
+            if(confirm("Supprimer ?")) {
+                await fetch(`${API_P}/${id}`, { method: 'DELETE' });
+                await fetch(`${API_H}/${id}`, { method: 'DELETE' });
+                rafraichir();
+            }
+        }
+        window.onload = rafraichir;
+    </script>
+</body>
+</html>

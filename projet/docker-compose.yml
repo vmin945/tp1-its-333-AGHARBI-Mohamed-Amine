@@ -1,0 +1,20 @@
+services:
+  person-service:
+    build: ./person_service
+    ports:
+      - "5001:5001"
+
+  health-service:
+    build: ./health_service
+    ports:
+      - "5002:5002"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - person-service
+      - health-service
